@@ -14,6 +14,7 @@ func main() {
 	inputPath := flag.String("input", "", "input text file to redact; reads stdin when omitted")
 	outputPath := flag.String("output", "", "optional path for redacted text output; writes stdout when omitted")
 	jsonPath := flag.String("json", "", "optional path for JSON evidence output")
+	jsonEvidenceOnly := flag.Bool("json-evidence-only", false, "omit redacted_text from JSON evidence output")
 	flag.Parse()
 
 	input, err := readInput(*inputPath)
@@ -35,7 +36,20 @@ func main() {
 	}
 
 	if *jsonPath != "" {
-		raw, err := json.MarshalIndent(result, "", "  ")
+		jsonOutput := any(result)
+		if *jsonEvidenceOnly {
+			jsonOutput = evidenceOnlyResult{
+				Detections:     result.Detections,
+				Plan:           result.Plan,
+				Evidence:       result.Evidence,
+				InputSHA256:    result.InputSHA256,
+				RedactedSHA256: result.RedactedSHA256,
+				DetectionCount: result.DetectionCount,
+				PlanCount:      result.PlanCount,
+				PayloadStored:  result.PayloadStored,
+			}
+		}
+		raw, err := json.MarshalIndent(jsonOutput, "", "  ")
 		if err != nil {
 			exitf("marshal JSON: %v", err)
 		}
@@ -47,6 +61,17 @@ func main() {
 	if *outputPath != "" || *jsonPath != "" {
 		fmt.Fprintf(os.Stderr, "Guard Alpha redact completed: %d detections, payload_stored=%t\n", result.DetectionCount, result.PayloadStored)
 	}
+}
+
+type evidenceOnlyResult struct {
+	Detections     any    `json:"detections"`
+	Plan           any    `json:"plan"`
+	Evidence       any    `json:"evidence"`
+	InputSHA256    string `json:"input_sha256"`
+	RedactedSHA256 string `json:"redacted_sha256"`
+	DetectionCount int    `json:"detection_count"`
+	PlanCount      int    `json:"plan_count"`
+	PayloadStored  bool   `json:"payload_stored"`
 }
 
 func readInput(path string) ([]byte, error) {

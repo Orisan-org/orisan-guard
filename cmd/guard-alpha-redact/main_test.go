@@ -50,6 +50,41 @@ func TestRedactCommandWritesRedactedTextAndEvidence(t *testing.T) {
 	}
 }
 
+func TestRedactCommandCanWriteEvidenceOnlyJSON(t *testing.T) {
+	temp := t.TempDir()
+	inputPath := filepath.Join(temp, "input.txt")
+	outputPath := filepath.Join(temp, "redacted.txt")
+	jsonPath := filepath.Join(temp, "evidence.json")
+
+	raw := "OPENAI_API_KEY=oskey_proj_synthetic000000000000000000000000000000000000000000000000"
+	if err := os.WriteFile(inputPath, []byte(raw), 0o600); err != nil {
+		t.Fatalf("write input: %v", err)
+	}
+
+	cmd := exec.Command("go", "run", ".", "--input", inputPath, "--output", outputPath, "--json", jsonPath, "--json-evidence-only")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("command failed: %v\n%s", err, string(out))
+	}
+
+	evidence, err := os.ReadFile(jsonPath)
+	if err != nil {
+		t.Fatalf("read evidence JSON: %v", err)
+	}
+	evidenceText := string(evidence)
+	if strings.Contains(evidenceText, `"redacted_text"`) {
+		t.Fatalf("evidence-only JSON stored redacted text:\n%s", evidenceText)
+	}
+	if strings.Contains(evidenceText, raw) || strings.Contains(evidenceText, "oskey_proj_synthetic") {
+		t.Fatalf("evidence-only JSON leaked raw value:\n%s", evidenceText)
+	}
+	for _, fragment := range []string{`"payload_stored": false`, `"input_sha256"`, `"redacted_sha256"`, `"evidence"`, `"placeholder"`} {
+		if !strings.Contains(evidenceText, fragment) {
+			t.Fatalf("evidence-only JSON missing %q:\n%s", fragment, evidenceText)
+		}
+	}
+}
+
 func TestRedactCommandReadsStdin(t *testing.T) {
 	cmd := exec.Command("go", "run", ".")
 	cmd.Stdin = strings.NewReader("token=synthetic-token-000000000000")
