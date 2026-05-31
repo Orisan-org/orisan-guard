@@ -15,6 +15,10 @@ type FixtureResult struct {
 	DetectedClasses []string `json:"detected_classes"`
 	MissingClasses  []string `json:"missing_classes"`
 	PayloadStored   bool     `json:"payload_stored"`
+	InputSHA256     string   `json:"input_sha256"`
+	RedactedSHA256  string   `json:"redacted_sha256"`
+	DetectionCount  int      `json:"detection_count"`
+	EvidenceCount   int      `json:"evidence_count"`
 	RedactedText    string   `json:"redacted_text"`
 }
 
@@ -22,6 +26,8 @@ type Summary struct {
 	FixtureCount            int      `json:"fixture_count"`
 	FixturesWithMissing     int      `json:"fixtures_with_missing"`
 	PayloadStoredViolations int      `json:"payload_stored_violations"`
+	EvidenceCountViolations int      `json:"evidence_count_violations"`
+	HashMissingViolations   int      `json:"hash_missing_violations"`
 	DetectedClasses         []string `json:"detected_classes"`
 }
 
@@ -51,6 +57,10 @@ func Evaluate(manifestPath string) ([]FixtureResult, error) {
 			DetectedClasses: detectedClasses,
 			MissingClasses:  missingClasses(fixture.Expected.DataClasses, detectedClasses),
 			PayloadStored:   result.PayloadStored,
+			InputSHA256:     result.InputSHA256,
+			RedactedSHA256:  result.RedactedSHA256,
+			DetectionCount:  result.DetectionCount,
+			EvidenceCount:   len(result.Evidence),
 			RedactedText:    result.RedactedText,
 		})
 	}
@@ -70,6 +80,12 @@ func Summarize(results []FixtureResult) Summary {
 		}
 		if result.PayloadStored {
 			summary.PayloadStoredViolations++
+		}
+		if result.EvidenceCount != result.DetectionCount {
+			summary.EvidenceCountViolations++
+		}
+		if result.InputSHA256 == "" || result.RedactedSHA256 == "" {
+			summary.HashMissingViolations++
 		}
 		for _, class := range result.DetectedClasses {
 			detected[class] = struct{}{}

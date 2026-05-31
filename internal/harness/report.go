@@ -12,6 +12,8 @@ func RenderMarkdown(summary Summary, results []FixtureResult) string {
 	fmt.Fprintf(&b, "- Fixtures: `%d`\n", summary.FixtureCount)
 	fmt.Fprintf(&b, "- Fixtures with missing classes: `%d`\n", summary.FixturesWithMissing)
 	fmt.Fprintf(&b, "- Payload storage violations: `%d`\n", summary.PayloadStoredViolations)
+	fmt.Fprintf(&b, "- Evidence count violations: `%d`\n", summary.EvidenceCountViolations)
+	fmt.Fprintf(&b, "- Hash missing violations: `%d`\n", summary.HashMissingViolations)
 	b.WriteString("- Detected classes: ")
 	if len(summary.DetectedClasses) == 0 {
 		b.WriteString("`none`\n")
@@ -33,7 +35,11 @@ func RenderMarkdown(summary Summary, results []FixtureResult) string {
 		b.WriteString("- Missing classes: ")
 		writeInlineList(&b, result.MissingClasses)
 		b.WriteByte('\n')
-		fmt.Fprintf(&b, "- Payload stored: `%t`\n\n", result.PayloadStored)
+		fmt.Fprintf(&b, "- Payload stored: `%t`\n", result.PayloadStored)
+		fmt.Fprintf(&b, "- Detection count: `%d`\n", result.DetectionCount)
+		fmt.Fprintf(&b, "- Evidence count: `%d`\n", result.EvidenceCount)
+		fmt.Fprintf(&b, "- Input SHA-256: `%s`\n", result.InputSHA256)
+		fmt.Fprintf(&b, "- Redacted SHA-256: `%s`\n\n", result.RedactedSHA256)
 	}
 
 	return b.String()

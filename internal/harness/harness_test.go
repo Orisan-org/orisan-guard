@@ -58,6 +58,12 @@ func TestSummarizeReportsReleaseGateCounts(t *testing.T) {
 	if summary.PayloadStoredViolations != 0 {
 		t.Fatalf("payload storage violations = %d", summary.PayloadStoredViolations)
 	}
+	if summary.EvidenceCountViolations != 0 {
+		t.Fatalf("evidence count violations = %d", summary.EvidenceCountViolations)
+	}
+	if summary.HashMissingViolations != 0 {
+		t.Fatalf("hash missing violations = %d", summary.HashMissingViolations)
+	}
 
 	expectedClasses := []string{
 		"api_key_like_value",
@@ -85,6 +91,12 @@ func TestEvaluateKeepsPayloadStoredFalse(t *testing.T) {
 	for _, result := range results {
 		if result.PayloadStored {
 			t.Fatalf("fixture %q payload_stored = true", result.FixtureID)
+		}
+		if result.InputSHA256 == "" || result.RedactedSHA256 == "" {
+			t.Fatalf("fixture %q missing hashes: %+v", result.FixtureID, result)
+		}
+		if result.DetectionCount != result.EvidenceCount {
+			t.Fatalf("fixture %q detection/evidence mismatch: %+v", result.FixtureID, result)
 		}
 	}
 }
@@ -153,6 +165,8 @@ func TestRenderMarkdownOmitsRedactedTextAndRawValues(t *testing.T) {
 		"# Guard Alpha Benchmark Report",
 		"Fixtures with missing classes",
 		"Payload storage violations",
+		"Evidence count violations",
+		"Hash missing violations",
 		"placeholder_collision",
 		"identity_and_database_values",
 	}
