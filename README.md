@@ -46,3 +46,19 @@ It does not:
 go test ./...
 go vet ./...
 ```
+
+Run the synthetic benchmark harness:
+
+```bash
+go run ./cmd/guard-alpha-benchmark \
+  --markdown /tmp/guard-alpha-benchmark.md \
+  --json /tmp/guard-alpha-benchmark.json
+```
+
+Expected current gate:
+
+- 11 fixtures
+- 0 missing-class fixtures
+- 0 payload-storage violations
+- 0 evidence-count violations
+- 0 hash-missing violations
