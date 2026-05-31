@@ -1,0 +1,204 @@
+{
+  "schema_version": "guard-alpha-benchmark.v0",
+  "description": "Synthetic redaction benchmark fixtures for Orisan Guard Alpha edge cases.",
+  "fixtures": [
+    {
+      "id": "placeholder_collision",
+      "input_path": "inputs/placeholder_collision.txt",
+      "description": "User text already contains placeholder-like tokens that must not collide with generated redaction placeholders.",
+      "tags": ["placeholder_collision", "evidence_leakage"],
+      "expected": {
+        "data_classes": ["api_key_like_value", "token_like_value"],
+        "confidence": "high",
+        "replacement_strategy": "stable_unique_placeholder_namespace",
+        "evidence_safe_preview": "Preview may show placeholder labels but must not reuse user-supplied placeholder text as generated evidence."
+      },
+      "properties": {
+        "placeholder_collision": true,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "fake_secret_negative",
+      "input_path": "inputs/fake_secret_negative.md",
+      "description": "Obvious fake/example secrets should be recognized as low-confidence or ignored depending on future policy.",
+      "tags": ["fake_secrets"],
+      "expected": {
+        "data_classes": ["token_like_value"],
+        "confidence": "low",
+        "replacement_strategy": "preserve_or_low_confidence_annotation",
+        "evidence_safe_preview": "Preview may include the fake/example marker but not train the classifier to over-redact harmless examples."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "synthetic_real_looking_secrets",
+      "input_path": "inputs/synthetic_real_looking_secrets.env",
+      "description": "Synthetic values shaped like real provider credentials for positive redaction tests.",
+      "tags": ["synthetic_secrets", "evidence_leakage"],
+      "expected": {
+        "data_classes": ["api_key_like_value", "token_like_value", "private_key_marker"],
+        "confidence": "high",
+        "replacement_strategy": "class_specific_placeholder",
+        "evidence_safe_preview": "Preview must show only class, prefix length, and location metadata; never the full synthetic secret."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "internal_urls_and_hosts",
+      "input_path": "inputs/internal_urls_and_hosts.txt",
+      "description": "Internal URLs, hostnames, ports, and private IP ranges that should redact with network-location semantics.",
+      "tags": ["internal_urls", "hostnames"],
+      "expected": {
+        "data_classes": ["internal_url", "internal_hostname", "ip_address"],
+        "confidence": "medium",
+        "replacement_strategy": "network_location_placeholder",
+        "evidence_safe_preview": "Preview may show URL scheme and port presence, but not full hostnames or paths."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "syntax_preserving_json",
+      "input_path": "inputs/syntax_preserving.json",
+      "description": "Valid JSON must remain valid after replacement.",
+      "tags": ["syntax_preserving", "json"],
+      "expected": {
+        "data_classes": ["api_key_like_value", "internal_url", "token_like_value"],
+        "confidence": "high",
+        "replacement_strategy": "quoted_json_string_placeholder",
+        "evidence_safe_preview": "Preview should preserve JSON paths and redact values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": true,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "syntax_preserving_yaml",
+      "input_path": "inputs/syntax_preserving.yaml",
+      "description": "Valid YAML should remain structurally readable after replacement.",
+      "tags": ["syntax_preserving", "yaml"],
+      "expected": {
+        "data_classes": ["token_like_value", "internal_hostname"],
+        "confidence": "high",
+        "replacement_strategy": "yaml_scalar_placeholder",
+        "evidence_safe_preview": "Preview should include YAML key paths and omit sensitive scalar values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": true,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "syntax_preserving_code",
+      "input_path": "inputs/syntax_preserving.js",
+      "description": "Code snippets should remain parse-shaped when strings are redacted.",
+      "tags": ["syntax_preserving", "code"],
+      "expected": {
+        "data_classes": ["api_key_like_value", "internal_url"],
+        "confidence": "high",
+        "replacement_strategy": "quoted_code_string_placeholder",
+        "evidence_safe_preview": "Preview may include variable names and line numbers but not literal secret values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": true,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "edited_safe_prompt_rescan",
+      "input_path": "inputs/edited_safe_prompt_rescan.md",
+      "description": "A prompt after user edits should rescan cleanly when sensitive-looking values have already been safely replaced.",
+      "tags": ["edited_safe_prompt", "rescan"],
+      "expected": {
+        "data_classes": ["token_like_value"],
+        "confidence": "info",
+        "replacement_strategy": "idempotent_noop_for_guard_placeholders",
+        "evidence_safe_preview": "Preview should show that generated placeholders are stable and not re-redacted repeatedly."
+      },
+      "properties": {
+        "placeholder_collision": true,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": true
+      }
+    },
+    {
+      "id": "prompt_injection_against_redaction",
+      "input_path": "inputs/prompt_injection_against_redaction.md",
+      "description": "Prompt-injection language attempts to prevent redaction or force evidence leakage.",
+      "tags": ["prompt_injection", "evidence_leakage"],
+      "expected": {
+        "data_classes": ["api_key_like_value"],
+        "confidence": "high",
+        "replacement_strategy": "redact_sensitive_values_ignore_prompt_instruction",
+        "evidence_safe_preview": "Preview must not obey fixture text that asks the system to reveal raw values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "large_pasted_text_chunking",
+      "input_path": "inputs/large_pasted_text_chunking.txt",
+      "description": "Large pasted text with sensitive values near chunk boundaries.",
+      "tags": ["large_chunking", "synthetic_secrets"],
+      "expected": {
+        "data_classes": ["token_like_value", "internal_url"],
+        "confidence": "high",
+        "replacement_strategy": "chunk_boundary_safe_placeholder",
+        "evidence_safe_preview": "Preview should reference chunk index and offsets without exposing raw values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": true,
+        "edited_safe_rescan": false
+      }
+    },
+    {
+      "id": "identity_and_database_values",
+      "input_path": "inputs/identity_and_database_values.txt",
+      "description": "Synthetic email, phone number, customer identifier, and database URL values.",
+      "tags": ["identity", "database_url", "synthetic_secrets"],
+      "expected": {
+        "data_classes": ["email", "phone_number", "customer_identifier", "database_url"],
+        "confidence": "high",
+        "replacement_strategy": "class_specific_placeholder",
+        "evidence_safe_preview": "Preview may show class, location, and stable hash but not raw identity or connection string values."
+      },
+      "properties": {
+        "placeholder_collision": false,
+        "syntax_preserving": false,
+        "large_chunking": false,
+        "edited_safe_rescan": false
+      }
+    }
+  ]
+}

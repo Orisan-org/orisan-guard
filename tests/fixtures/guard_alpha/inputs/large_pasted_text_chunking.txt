@@ -1,0 +1,23 @@
+BEGIN SYNTHETIC LARGE PASTE
+
+This file represents a pasted incident note long enough to exercise chunking
+logic in a future redactor. The sensitive-looking values are synthetic and are
+placed near textual boundaries that future tests can expand into larger chunks.
+
+Chunk A filler:
+alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha
+alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha
+alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha alpha
+
+Boundary token:
+synthetic-large-token-000000000000000000000000
+
+Chunk B filler:
+bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo
+bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo
+bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo bravo
+
+Internal URL near another boundary:
+https://large-paste.internal.example.invalid/guard-alpha/chunk-boundary
+
+END SYNTHETIC LARGE PASTE

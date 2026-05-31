@@ -1,0 +1,11 @@
+The user wrote these literal strings before Guard generated anything:
+
+[REDACTED_API_KEY_1]
+{{GUARD_ALPHA_SECRET_0001}}
+__ORISAN_GUARD_PLACEHOLDER__
+
+Synthetic credential for collision handling:
+oskey_test_synthetic_collision_000000000000000000000000
+
+Expected behavior: future redaction output must not confuse user-authored
+placeholder-looking text with generated placeholders.

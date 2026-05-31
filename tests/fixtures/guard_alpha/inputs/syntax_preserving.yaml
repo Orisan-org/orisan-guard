@@ -1,0 +1,8 @@
+service: synthetic-guard-worker
+token: synthetic-yaml-token-000000000000000000
+hosts:
+  primary: guard-worker.internal.example.invalid
+  fallback: guard-worker-backup.internal.example.invalid
+features:
+  redact_prompts: true
+  upload_raw_prompts: false

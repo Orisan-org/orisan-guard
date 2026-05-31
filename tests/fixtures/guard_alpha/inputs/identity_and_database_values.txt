@@ -1,0 +1,8 @@
+Synthetic account escalation note:
+
+- Email: qa.user+synthetic@example.invalid
+- Phone: +1 202-555-0142
+- Customer identifier: cus_synthetic_00000000000042
+- Database URL: postgres://synthetic_user:synthetic_pass@db.internal.example.invalid:5432/synthetic_app
+
+All values are synthetic and use reserved example ranges or `.invalid` domains.

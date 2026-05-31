@@ -1,0 +1,10 @@
+Synthetic internal network notes:
+
+- API base: https://payments-api.internal.example.invalid/v1/charge
+- Admin panel: http://guard-admin.corp.example.invalid:8080/settings
+- Queue host: queue-a.service.local
+- Private IP: 10.42.7.19
+- Staging host: scout-staging.internal.invalid
+
+The domains use reserved `.invalid` or local-style names and contain no real
+organization infrastructure.

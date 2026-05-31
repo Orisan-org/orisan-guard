@@ -1,0 +1,9 @@
+{
+  "service": "synthetic-payments",
+  "apiKey": "oskey_test_synthetic_json_000000000000000000000000",
+  "endpoint": "https://payments.internal.example.invalid/v1",
+  "headers": {
+    "Authorization": "Bearer synthetic-json-token-000000000000"
+  },
+  "retry": 2
+}
