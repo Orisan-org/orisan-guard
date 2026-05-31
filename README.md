@@ -94,3 +94,11 @@ printf 'token=synthetic-token-000000000000' | go run ./cmd/guard-alpha-redact
 ```
 
 The JSON evidence includes hashes, detections, placeholders, counts, and `payload_stored=false`. It must not contain raw prompt values.
+
+## Tracker
+
+Guard alpha core next steps are tracked here:
+
+```text
+https://github.com/Orisan-org/orisan-guard/issues/1
+```
