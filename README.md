@@ -84,7 +84,8 @@ Run local redaction on one file:
 go run ./cmd/guard-alpha-redact \
   --input /path/to/input.txt \
   --output /tmp/guard-redacted.txt \
-  --json /tmp/guard-evidence.json
+  --json /tmp/guard-evidence.json \
+  --json-evidence-only
 ```
 
 Or pipe text through stdin:
@@ -93,7 +94,7 @@ Or pipe text through stdin:
 printf 'token=synthetic-token-000000000000' | go run ./cmd/guard-alpha-redact
 ```
 
-The JSON evidence includes hashes, detections, placeholders, counts, and `payload_stored=false`. It must not contain raw prompt values.
+The JSON evidence includes hashes, detections, placeholders, counts, and `payload_stored=false`. Use `--json-evidence-only` when the JSON artifact should omit `redacted_text` and carry evidence metadata only. JSON evidence must not contain raw prompt values.
 
 ## Tracker
 
