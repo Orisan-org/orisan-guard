@@ -13,6 +13,7 @@ This repository contains the early local core for Guard Alpha:
 - syntax-preserving redactor
 - synthetic benchmark fixtures
 - benchmark harness and docs
+- inert browser extension scaffold with no permissions
 
 ## Product Boundary
 
@@ -37,8 +38,22 @@ It does not:
 - upload raw prompts
 - call an LLM
 - call a cloud service
-- include a browser extension yet
+- include active browser interception yet
 - include cloud sync or a control plane
+
+## Extension Scaffold
+
+The `extension/` directory contains a Manifest V3 shell only.
+
+It has:
+
+- no host permissions
+- no content scripts
+- no prompt interception
+- no cloud upload
+- no externally connectable surface
+
+The Go test suite includes an extension policy test that fails if host permissions, content scripts, or external connection settings are added accidentally.
 
 ## Verify
 
