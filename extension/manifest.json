@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Orisan Guard Alpha",
+  "version": "0.1.0",
+  "description": "Sensitive context protection for AI tools. Scaffold only; prompt protection is not active yet.",
+  "action": {
+    "default_title": "Orisan Guard",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+  "icons": {}
+}
