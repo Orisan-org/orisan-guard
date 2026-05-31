@@ -77,3 +77,20 @@ Expected current gate:
 - 0 payload-storage violations
 - 0 evidence-count violations
 - 0 hash-missing violations
+
+Run local redaction on one file:
+
+```bash
+go run ./cmd/guard-alpha-redact \
+  --input /path/to/input.txt \
+  --output /tmp/guard-redacted.txt \
+  --json /tmp/guard-evidence.json
+```
+
+Or pipe text through stdin:
+
+```bash
+printf 'token=synthetic-token-000000000000' | go run ./cmd/guard-alpha-redact
+```
+
+The JSON evidence includes hashes, detections, placeholders, counts, and `payload_stored=false`. It must not contain raw prompt values.
