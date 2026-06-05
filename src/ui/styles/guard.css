@@ -1,0 +1,62 @@
+.orisan-guard {
+  box-sizing: border-box;
+  display: block;
+  margin: 8px 0;
+  max-width: min(760px, 100%);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172026;
+  z-index: 2147483647;
+}
+
+.orisan-guard--unsupported {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  padding: 8px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 12%);
+}
+
+.orisan-guard__badge,
+.orisan-guard__action {
+  border: 1px solid #91b6a5;
+  border-radius: 6px;
+  background: #ecf8f2;
+  color: #12392a;
+  padding: 6px 9px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.orisan-guard__panel {
+  margin-top: 8px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+}
+
+.orisan-guard__title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.orisan-guard__preview {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 8px;
+  font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.orisan-guard__block {
+  color: #8a1f11;
+  font-weight: 600;
+}

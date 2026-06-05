@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Local AI Fixture</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 32px;
+      }
+      #editor {
+        min-height: 120px;
+        border: 1px solid #999;
+        padding: 12px;
+        white-space: pre-wrap;
+      }
+      #sent-log {
+        margin-top: 20px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chat-root">
+      <div id="editor" contenteditable="true" role="textbox" aria-label="Prompt editor"></div>
+      <button id="send" type="button">Send</button>
+      <div id="sent-log"></div>
+    </div>
+    <script>
+      document.getElementById("send").addEventListener("click", () => {
+        document.getElementById("sent-log").textContent = document.getElementById("editor").innerText;
+      });
+    </script>
+  </body>
+</html>
