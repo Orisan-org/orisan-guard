@@ -6,9 +6,7 @@ It detects sensitive values in typed or pasted prompt text, creates a safer rewr
 
 ## Status
 
-Guard is a portfolio/community project and future product option. It is not the current Orisan startup product wedge. The active product-discovery wedge is MCP Scanner.
-
-This repository is a controlled learning project for Guard Phase 1. It is not a production release and not a finalized startup product.
+Guard is an early open-source prototype. It is not production-ready, and its browser-site coverage is intentionally limited while the extension architecture and local rewrite flow are tested.
 
 ## What Guard Is
 
@@ -20,7 +18,7 @@ This repository is a controlled learning project for Guard Phase 1. It is not a 
 
 ## What Guard Is Not
 
-Guard is not MCP Scanner, Scout, Relay, Review, Control Plane, a SaaS dashboard, a generic DLP replacement, an enterprise policy console, or a cloud prompt-processing service.
+Guard is not a SaaS dashboard, a generic DLP replacement, an enterprise policy console, or a cloud prompt-processing service.
 
 Phase 1 does not protect PDFs, screenshots, voice input, rich file uploads, unsupported sites, or every AI chat website.
 
@@ -38,25 +36,17 @@ Guard must not store raw prompts, rewritten prompts, full sensitive values, or r
 
 ## Supported Sites
 
-| Site | Status |
-| --- | --- |
-| Local fixture page | Supported for development and tests |
-| ChatGPT | Experimental adapter |
-| Claude, Gemini, Perplexity | Deferred |
+| Site                       | Status                              |
+| -------------------------- | ----------------------------------- |
+| Local fixture page         | Supported for development and tests |
+| ChatGPT                    | Experimental adapter                |
+| Claude, Gemini, Perplexity | Deferred                            |
 
 If a site adapter is unsupported or broken, Guard should say so instead of silently claiming protection.
 
 ## Development
 
-```bash
-pnpm install
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
-pnpm exec playwright install --with-deps chromium
-pnpm e2e
-```
+See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for local build and test commands.
 
 ## How Protection Works
 
@@ -74,9 +64,9 @@ Guard Phase 1 supports typed and pasted text only. It does not protect PDFs, scr
 
 ChatGPT support is experimental because AI site DOMs change frequently. The local fixture adapter is the source-of-truth test surface.
 
-## Roadmap
+## Current Scope
 
-Phase 1:
+Implemented in this prototype:
 
 - Local core engine
 - Chrome extension
@@ -88,7 +78,7 @@ Phase 1:
 - Final pre-send verification
 - Local evidence only
 
-Deferred:
+Not implemented:
 
 - Cloud detection
 - Central dashboard
