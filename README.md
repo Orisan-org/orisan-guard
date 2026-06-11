@@ -8,6 +8,8 @@ It detects sensitive values in typed or pasted prompt text, creates a safer rewr
 
 Guard is an early open-source prototype. It is not production-ready, and its browser-site coverage is intentionally limited while the extension architecture and local rewrite flow are tested.
 
+Guard is now a parked experiment. Active Orisan development is on [mcpscan](https://github.com/Orisan-org/mcpscan); Guard receives no feature work, only honesty fixes.
+
 ## What Guard Is
 
 - A Chrome Manifest V3 browser extension.
@@ -21,6 +23,21 @@ Guard is an early open-source prototype. It is not production-ready, and its bro
 Guard is not a SaaS dashboard, a generic DLP replacement, an enterprise policy console, or a cloud prompt-processing service.
 
 Phase 1 does not protect PDFs, screenshots, voice input, rich file uploads, unsupported sites, or every AI chat website.
+
+## What Guard Detects
+
+Guard uses deterministic, pattern-based detection for:
+
+- Emails
+- Phone numbers in North American formats
+- Contextual customer/account identifiers
+- US Social Security Numbers
+- Payment card numbers with Luhn validation and known card prefixes
+- Secrets such as GitHub tokens, AWS access-key IDs, bearer/JWT-like tokens, private key material, database URLs with credentials, webhook URLs, and secret-like config assignments
+- Internal hostnames, URLs, private IPs, and local/internal paths
+- User-defined custom terms
+
+Guard does not use ML for detection. It does not detect names, addresses, or freeform PII.
 
 ## Privacy
 
