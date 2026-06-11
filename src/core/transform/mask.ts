@@ -17,7 +17,10 @@ export function maskForSpan(span: SensitiveSpan, original: string): string {
 }
 
 function maskDatabaseUrl(value: string): string {
-  return value.replace(/:\/\/([^:\s/@]+):([^@\s]+)@/, "://[REDACTED_USER]:[REDACTED_PASSWORD]@").replace(/@[^/\s]+/, "@DB_HOST");
+  const kind =
+    value.match(/^(postgresql?|mysql|mongodb(?:\+srv)?|redis):\/\//i)?.[1] ??
+    "DATABASE";
+  return `[REDACTED_${kind.toUpperCase().replace("+", "_")}_DATABASE_URL]`;
 }
 
 function maskConfigLine(value: string): string {

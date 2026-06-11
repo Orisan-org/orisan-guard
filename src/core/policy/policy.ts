@@ -1,20 +1,41 @@
 import type { PolicyDecision } from "./decisions";
-import type { GuardMode, GuardPolicy, TransformStrategy } from "../models/policy";
+import type {
+  GuardMode,
+  GuardPolicy,
+  TransformStrategy,
+} from "../models/policy";
 import type { SensitiveSpan } from "../models/span";
 import { hasHighRisk } from "./decisions";
 import { strategyForSpan } from "../transform/strategies";
 
-export function applyPolicy(input: { spans: SensitiveSpan[]; mode: GuardMode; policy: GuardPolicy }): PolicyDecision {
+export function applyPolicy(input: {
+  spans: SensitiveSpan[];
+  mode: GuardMode;
+  policy: GuardPolicy;
+}): PolicyDecision {
   const enabled = new Set(input.policy.enabledClasses);
-  const spans = input.mode === "custom" ? input.spans.filter((span) => enabled.has(span.class)) : input.spans;
+  const spans =
+    input.mode === "custom"
+      ? input.spans.filter((span) => enabled.has(span.class))
+      : input.spans;
   const strategyOverrides = new Map<string, TransformStrategy>();
   const warnings: string[] = [];
 
   for (const span of spans) {
-    const override = input.mode === "custom" ? input.policy.customStrategies[span.class] : undefined;
+    const override =
+      input.mode === "custom"
+        ? input.policy.customStrategies[span.class]
+        : undefined;
     let strategy = strategyForSpan(span, override);
 
-    if (input.mode === "strict" && (span.class === "private_key" || span.severity === "critical")) {
+    if (input.mode !== "strict" && !override && span.class === "private_key") {
+      strategy = "mask";
+    }
+
+    if (
+      input.mode === "strict" &&
+      (span.class === "private_key" || span.severity === "critical")
+    ) {
       strategy = "block";
     }
 
@@ -31,7 +52,11 @@ export function applyPolicy(input: { spans: SensitiveSpan[]; mode: GuardMode; po
   }
 
   if (input.mode === "assist") {
-    return { decision: hasHighRisk(spans) ? "ask" : "transform", strategyOverrides, warnings };
+    return {
+      decision: hasHighRisk(spans) ? "ask" : "transform",
+      strategyOverrides,
+      warnings,
+    };
   }
 
   return { decision: "transform", strategyOverrides, warnings };

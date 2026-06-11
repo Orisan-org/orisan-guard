@@ -9,7 +9,7 @@ describe("policy modes", () => {
       surface: "browser",
       destination: "local_fixture",
       mode: "assist",
-      policy: defaultPolicy
+      policy: defaultPolicy,
     });
 
     expect(result.decision).toBe("ask");
@@ -21,10 +21,23 @@ describe("policy modes", () => {
       surface: "browser",
       destination: "local_fixture",
       mode: "auto_protect",
-      policy: defaultPolicy
+      policy: defaultPolicy,
     });
 
     expect(result.decision).toBe("transform");
+  });
+
+  it("assist mode offers a safe rewrite for private keys", async () => {
+    const result = await analyze({
+      text: privateKeyPrompt,
+      surface: "browser",
+      destination: "local_fixture",
+      mode: "assist",
+      policy: defaultPolicy,
+    });
+
+    expect(result.decision).toBe("ask");
+    expect(result.rewrittenText).not.toContain("BEGIN PRIVATE KEY");
   });
 
   it("strict mode blocks private keys", async () => {
@@ -33,7 +46,7 @@ describe("policy modes", () => {
       surface: "browser",
       destination: "local_fixture",
       mode: "strict",
-      policy: defaultPolicy
+      policy: defaultPolicy,
     });
 
     expect(result.decision).toBe("block");
