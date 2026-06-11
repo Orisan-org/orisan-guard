@@ -5,6 +5,8 @@ export type SensitivityClass =
   | "webhook_url"
   | "email"
   | "phone"
+  | "ssn"
+  | "payment_card"
   | "customer_identifier"
   | "internal_url"
   | "internal_hostname"
@@ -19,7 +21,14 @@ export type SensitivityClass =
 
 export type Severity = "info" | "low" | "medium" | "high" | "critical";
 
-export type TransformStrategy = "keep" | "mask" | "placeholder" | "generalize" | "summarize" | "ask" | "block";
+export type TransformStrategy =
+  | "keep"
+  | "mask"
+  | "placeholder"
+  | "generalize"
+  | "summarize"
+  | "ask"
+  | "block";
 
 export type GuardMode = "assist" | "auto_protect" | "strict" | "custom";
 
@@ -28,7 +37,15 @@ export interface CustomTerm {
   value: string;
   label?: string | undefined;
   strategy: Extract<TransformStrategy, "placeholder" | "generalize" | "block">;
-  sensitivityClass?: Extract<SensitivityClass, "custom_term" | "service_name" | "project_codename" | "business_sensitive"> | undefined;
+  sensitivityClass?:
+    | Extract<
+        SensitivityClass,
+        | "custom_term"
+        | "service_name"
+        | "project_codename"
+        | "business_sensitive"
+      >
+    | undefined;
 }
 
 export interface GuardPolicy {
@@ -45,6 +62,8 @@ export const allSensitivityClasses: SensitivityClass[] = [
   "webhook_url",
   "email",
   "phone",
+  "ssn",
+  "payment_card",
   "customer_identifier",
   "internal_url",
   "internal_hostname",
@@ -55,12 +74,12 @@ export const allSensitivityClasses: SensitivityClass[] = [
   "stack_trace",
   "source_config",
   "business_sensitive",
-  "custom_term"
+  "custom_term",
 ];
 
 export const defaultPolicy: GuardPolicy = {
   enabledClasses: allSensitivityClasses,
   customTerms: [],
   customStrategies: {},
-  evidenceEnabled: true
+  evidenceEnabled: true,
 };

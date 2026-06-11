@@ -3,6 +3,8 @@ import type { SensitivityClass } from "../models/policy";
 const labels: Partial<Record<SensitivityClass, string>> = {
   email: "EMAIL",
   phone: "PHONE",
+  ssn: "SSN",
+  payment_card: "PAYMENT_CARD",
   customer_identifier: "CUSTOMER_ID",
   internal_url: "INTERNAL_URL",
   internal_hostname: "INTERNAL_HOST",
@@ -12,7 +14,7 @@ const labels: Partial<Record<SensitivityClass, string>> = {
   ticket_id: "TICKET",
   stack_trace: "INTERNAL_PATH",
   custom_term: "CUSTOM_TERM",
-  business_sensitive: "PRIVATE_CONTEXT"
+  business_sensitive: "PRIVATE_CONTEXT",
 };
 
 export class PlaceholderMap {
